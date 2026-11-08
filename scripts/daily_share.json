@@ -1,0 +1,146 @@
+{
+  "name": "IndieHub daily share",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        -160
+      ],
+      "id": "cbddfb5e-2b15-43b9-8b92-e9e04096cf6c",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://indiehub.best/api/random",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        -60
+      ],
+      "id": "0e71dae5-9b09-4df4-8053-cb65da34859b",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "authentication": "webhook",
+        "content": "=🎉 {{ $json.data.name }}\n\n{{ $json.data.description }}\n\n{{ $json.data.link }}",
+        "options": {
+          "avatar_url": "https://indiehub.best/logo.png",
+          "username": "IndieHub"
+        }
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        180,
+        -160
+      ],
+      "id": "b251f907-c3e8-4403-a4eb-2f4efd0727ba",
+      "name": "Discord",
+      "webhookId": "0691be21-4483-4b58-a513-0171074aae33",
+      "credentials": {
+        "discordWebhookApi": {
+          "id": "1IHVr3r3jJ6XhpUp",
+          "name": "Discord Webhook for IndieHub Channel"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -260,
+        40
+      ],
+      "id": "48ca1967-e1b2-494f-9a7d-708e7cdb7641",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "text": "=🎉 {{ $json.data.name }}\n\n{{ $json.data.description }}\n\n{{ $json.data.link }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        180,
+        40
+      ],
+      "id": "22204e59-baff-4953-80fb-95cccb30d38c",
+      "name": "X",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "tzYpZKFQR1i8vhNX",
+          "name": "X account of indie_maker_fox"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Discord",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "X",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "479be50d-06be-4b70-aefa-d0dad157a882",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "82961d810de5b5414842e6e24aecc8540cefe2d67c71df3531466640f0d3bda7"
+  },
+  "id": "dc65meEbNXeUSTUC",
+  "tags": []
+}
